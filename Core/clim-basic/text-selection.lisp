@@ -193,7 +193,9 @@
       (setf point-2-x (pointer-event-x event)
             point-2-y (pointer-event-y event)
             dragging-p nil)
-      (copy-to-selection (port pane) pane (fetch-selection pane)))))
+      (let ((content (fetch-selection pane)))
+        (when (plusp (length content))
+          (copy-to-selection (port pane) pane content))))))
 
 (defun repaint-markings (pane old-markings new-markings)
   (let ((old-region (reduce #'region-union (mapcar #'(lambda (x) (marking-region pane x)) old-markings)
